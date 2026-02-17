@@ -154,6 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: const InputDecoration(
                               labelText: 'Password',
                               prefixIcon: Icon(Icons.lock),
+                              // suffixIcon: Icon(Icons.visibility_off),
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -171,25 +172,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 12),
                           Divider(height: 40),
-                        //  RichText(text: TextSpan(    //dont have account create one
-                        //     text: "Don't have an account? ",
-                        //     style: TextStyle(color: Colors.black54),
-                        //     children: [
-                        //       TextSpan(
-                        //         text: 'Contact Admin',
-                        //         style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ],
-                        //   )),
-ElevatedButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-    );
-  },
-  child: const Text("Login as Admin"),
-)
+                         RichText(text: TextSpan(    //dont have account create one
+                            text: "Don't have an account? ",
+                            style: TextStyle(color: Colors.black54),
+                            children: [
+                              TextSpan(
+                                text: 'Contact Admin',
+                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )),
+// ElevatedButton(
+//   onPressed: () {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+//     );
+//   },
+//   child: const Text("Login as Admin"),
+// )
                         ],
                       ),
                     ),
@@ -438,10 +439,10 @@ class QuickActions extends StatelessWidget {
               _ActionTile(title: "Grades", icon: Icons.star_border, color: const Color(0xFF4CB050),
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherGradesScreen())),),
               
-              _ActionTile(title: "Assignments", icon: Icons.assignment_rounded, color: const Color(0xFFE91E63)),
-              _ActionTile(title: "Admin", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
+              // _ActionTile(title: "Assignments", icon: Icons.assignment_rounded, color: const Color(0xFFE91E63)),
+              _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
-                // Fees remaining
+              
               _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
             ],
           ),
@@ -487,10 +488,7 @@ class _ActionTile extends StatelessWidget {
     );
   }
 }
-
-// ────────────────────────────────────────────────
-//               ATTENDANCE SCREEN
-// ────────────────────────────────────────────────
+// attendance screen
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
 
@@ -745,7 +743,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.send),
-                  label: const Text('Generate Report'),
+                  label: const Text('Submit Attendance'),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(52),
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -788,7 +786,7 @@ class _TeacherHomeworkScreenState
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  String? editingId; // for edit mode
+  String? editingId; 
 
   @override
   Widget build(BuildContext context) {
@@ -1027,7 +1025,6 @@ class _TeacherHomeworkScreenState
       editingId = null;
     }
 
-    // 🔥 CLEAR FIELDS
     titleController.clear();
     descriptionController.clear();
     selectedClass = null;
