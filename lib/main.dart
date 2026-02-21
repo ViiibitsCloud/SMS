@@ -23,6 +23,35 @@ void main() async {
   runApp(const TeacherApp());
 }
 
+class ResponsiveWrapper extends StatelessWidget {
+  final Widget child;
+  const ResponsiveWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: width > 1200
+              ? 1100
+              : width > 900
+                  ? 900
+                  : width,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: width > 900 ? 32 : 16,
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+
 class TeacherApp extends StatelessWidget {
   const TeacherApp({super.key});
 
@@ -91,119 +120,113 @@ class _LoginScreenState extends State<LoginScreen> {
     if (mounted) setState(() => _loading = false);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue[900]!, Colors.blue[400]!],
-          ),
+@override
+Widget build(BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
+  final isWebLayout = width > 900;
+
+  return Scaffold(
+    body: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue[900]!, Colors.blue[400]!],
         ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  // i want to add logo and name anbove the card
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'MG Public School',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Card(
-                    elevation: 12,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(32),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.school_rounded, size: 68, color: Theme.of(context).colorScheme.primary),
-                          const SizedBox(height: 24),
-                          const Text('Teacher Login', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 32),
-                          TextField(
-                            controller: _usernameCtrl,
-                            decoration: const InputDecoration(
-                              labelText: 'Username',
-                              prefixIcon: Icon(Icons.person),
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          TextField(
-                            controller: _passwordCtrl,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Password',
-                              prefixIcon: Icon(Icons.lock),
-                              // suffixIcon: Icon(Icons.visibility_off),
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: ElevatedButton.icon(
-                              icon: _loading
-                                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
-                                  : const Icon(Icons.login),
-                              label: Text(_loading ? 'Signing in...' : 'Login'),
-                              onPressed: _loading ? null : _login,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Divider(height: 40),
-                         RichText(text: TextSpan(    //dont have account create one
-                            text: "Don't have an account? ",
-                            style: TextStyle(color: Colors.black54),
-                            children: [
-                              TextSpan(
-                                text: 'Contact Admin',
-                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-// ElevatedButton(
-//   onPressed: () {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-//     );
-//   },
-//   child: const Text("Login as Admin"),
-// )
-                        ],
+      ),
+      child: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: isWebLayout ? 500 : double.infinity,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        'assets/logo.png',
+                        width: 100,
+                        height: 100,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    const Text(
+                      'MG Public School',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: Column(
+                          children: [
+                            const Icon(Icons.school,
+                                size: 60, color: Colors.blue),
+                            const SizedBox(height: 20),
+                            const Text("Teacher Login",
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 24),
+
+                            TextField(
+                              controller: _usernameCtrl,
+                              decoration: const InputDecoration(
+                                labelText: "Username",
+                                prefixIcon: Icon(Icons.person),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            TextField(
+                              controller: _passwordCtrl,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                labelText: "Password",
+                                prefixIcon: Icon(Icons.lock),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: _loading ? null : _login,
+                                child: _loading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : const Text("Login"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 // ────────────────────────────────────────────────
@@ -213,42 +236,16 @@ class HomeScreen extends StatelessWidget {
   final String teacherName;
 
   const HomeScreen({super.key, required this.teacherName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: SafeArea(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
+      child: ResponsiveWrapper(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-
           child: Column(
             children: [
               DashboardHeader(teacherName: teacherName),
-              // logout button
-            //         Row
-            // (
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.only(right: 16, top: 8),
-            //       child: ElevatedButton.icon(
-            //         icon: const Icon(Icons.logout),
-            //         label: const Text('Logout'),
-            //         style: ElevatedButton.styleFrom(
-            //           backgroundColor: Colors.red,
-            //         ),
-            //         onPressed: () {
-            //           Navigator.pushReplacement(
-            //             context,
-            //             MaterialPageRoute(builder: (_) => const LoginScreen()),
-            //           );
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               const TodaySchedule(),
               const SizedBox(height: 24),
               const QuickActions(),
@@ -257,8 +254,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class DashboardHeader extends StatelessWidget {
@@ -417,36 +415,77 @@ class QuickActions extends StatelessWidget {
         children: [
           const Text("Quick Actions", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            childAspectRatio: 1.05,
-            children: [
-              _ActionTile(
-                title: "Attendance",
-                icon: Icons.person,
-                color: const Color(0xFF3F51B5),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AttendanceScreen())),
-              ),
-              _ActionTile(
-                title: "Announcements",
-                icon: Icons.message,
-                color: const Color(0xFFFF9700),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AnnouncementScreen())),
-              ),
-              _ActionTile(title: "HomeWork", icon: Icons.book, color: const Color(0xFF9C28B1),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherHomeworkScreen())),),
-              _ActionTile(title: "Grades", icon: Icons.star_border, color: const Color(0xFF4CB050),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherGradesScreen())),),
+          LayoutBuilder(
+  builder: (context, constraints) {
+    int crossAxisCount = 2;
+
+    if (constraints.maxWidth > 1100) {
+      crossAxisCount = 4;
+    } else if (constraints.maxWidth > 700) {
+      crossAxisCount = 3;
+    }
+
+    return GridView.count(
+      crossAxisCount: crossAxisCount,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.1,
+      children: [
+        // your action tiles
+        _ActionTile(
+          title: "Attendance",
+          icon: Icons.person,
+          color: const Color(0xFF3F51B5),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AttendanceScreen())),
+        ),
+        _ActionTile(
+          title: "Announcements",
+          icon: Icons.message,
+          color: const Color(0xFFFF9700),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AnnouncementScreen())),
+        ),
+        _ActionTile(title: "HomeWork", icon: Icons.book, color: const Color(0xFF9C28B1),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherHomeworkScreen())),),
+        _ActionTile(title: "Grades", icon: Icons.star_border, color: const Color(0xFF4CB050),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherGradesScreen())),),
+        _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
+        _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
+        
+      ],
+    );
+  },
+)
+          // GridView.count(
+          //   crossAxisCount: 2,
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   childAspectRatio: 1.05,
+          //   children: [
+          //     _ActionTile(
+          //       title: "Attendance",
+          //       icon: Icons.person,
+          //       color: const Color(0xFF3F51B5),
+          //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AttendanceScreen())),
+          //     ),
+          //     _ActionTile(
+          //       title: "Announcements",
+          //       icon: Icons.message,
+          //       color: const Color(0xFFFF9700),
+          //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AnnouncementScreen())),
+          //     ),
+          //     _ActionTile(title: "HomeWork", icon: Icons.book, color: const Color(0xFF9C28B1),
+          //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherHomeworkScreen())),),
+          //     _ActionTile(title: "Grades", icon: Icons.star_border, color: const Color(0xFF4CB050),
+          //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherGradesScreen())),),
               
-              // _ActionTile(title: "Assignments", icon: Icons.assignment_rounded, color: const Color(0xFFE91E63)),
-              _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
+          //     // _ActionTile(title: "Assignments", icon: Icons.assignment_rounded, color: const Color(0xFFE91E63)),
+          //     _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
+          //       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
               
-              _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
-            ],
-          ),
+          //     _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -635,7 +674,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       backgroundColor: Colors.blue[900],
       foregroundColor: Colors.white,
       ),
-      body: Padding(
+      body: ResponsiveWrapper(
+        child:Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -759,6 +799,7 @@ Colors.white,
           
         ),
       ),
+      ),
     );
   }
 }
@@ -801,7 +842,9 @@ class _TeacherHomeworkScreenState
         onPressed: () => _showAddEditSheet(),
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body:ResponsiveWrapper(
+       child:
+       StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection("homework")
             .orderBy("createdAt", descending: true)
@@ -832,6 +875,7 @@ class _TeacherHomeworkScreenState
             },
           );
         },
+    ),
       ),
     );
   }
@@ -1095,7 +1139,9 @@ class _TeacherGradesScreenState
         onPressed: () => _showAddEditSheet(),
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
+      body: 
+      ResponsiveWrapper(
+        child: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection("grades")
             .orderBy("createdAt",
@@ -1132,6 +1178,7 @@ class _TeacherGradesScreenState
             },
           );
         },
+      ),
       ),
     );
   }
@@ -1781,7 +1828,9 @@ class _FeesRemainingScreenState extends State<FeesRemainingScreen> {
         backgroundColor: Colors.blue[800],
         foregroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
+      body: ResponsiveWrapper(
+       child:
+      SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -1862,6 +1911,7 @@ class _FeesRemainingScreenState extends State<FeesRemainingScreen> {
               ),
           ],
         ),
+      ),
       ),
     );
   }
