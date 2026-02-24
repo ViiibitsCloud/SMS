@@ -88,6 +88,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  bool _obscurePassword = true;
+  bool _rememberMe = false;
   bool _loading = false;
 
   final _teachers = {
@@ -101,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final user = _usernameCtrl.text.trim();
     final pass = _passwordCtrl.text.trim();
+    
 
     if (_teachers.containsKey(user) && _teachers[user]!['pass'] == pass) {
       final name = _teachers[user]!['name']!;
@@ -129,9 +132,9 @@ Widget build(BuildContext context) {
     body: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue[900]!, Colors.blue[400]!],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Colors.blue[500]!, Colors.blue[100]!],
         ),
       ),
       child: SafeArea(
@@ -185,6 +188,7 @@ Widget build(BuildContext context) {
                               controller: _usernameCtrl,
                               decoration: const InputDecoration(
                                 labelText: "Username",
+                                hintText: "Enter your username",
                                 prefixIcon: Icon(Icons.person),
                                 border: OutlineInputBorder(),
                               ),
@@ -193,19 +197,52 @@ Widget build(BuildContext context) {
 
                             TextField(
                               controller: _passwordCtrl,
-                              obscureText: true,
+                              // obscureText: true,
+                              obscureText: _obscurePassword,
                               decoration: const InputDecoration(
                                 labelText: "Password",
+                                hintText: "Enter your password",
+                                suffixIcon: Icon(Icons.visibility_off),
                                 prefixIcon: Icon(Icons.lock),
                                 border: OutlineInputBorder(),
                               ),
                             ),
                             const SizedBox(height: 24),
-
+                            Row(
+                              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _rememberMe,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _rememberMe = value!;
+                                        });
+                                      },
+                                    ),
+                                    const Text("Remember me"),
+                                  ],
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // Handle forgot password logic
+                                  },
+                                  child: const Text("Forgot Password?"),
+                                ),
+                              ],
+                            ),
                             SizedBox(
                               width: double.infinity,
                               height: 48,
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
                                 onPressed: _loading ? null : _login,
                                 child: _loading
                                     ? const CircularProgressIndicator(
@@ -438,19 +475,19 @@ class QuickActions extends StatelessWidget {
           color: const Color(0xFF3F51B5),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AttendanceScreen())),
         ),
-        _ActionTile(
-          title: "Announcements",
-          icon: Icons.message,
-          color: const Color(0xFFFF9700),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AnnouncementScreen())),
-        ),
+        // _ActionTile(
+        //   title: "Announcements",
+        //   icon: Icons.message,
+        //   color: const Color(0xFFFF9700),
+        //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AnnouncementScreen())),
+        // ),
         _ActionTile(title: "HomeWork", icon: Icons.book, color: const Color(0xFF9C28B1),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherHomeworkScreen())),),
         _ActionTile(title: "Grades", icon: Icons.star_border, color: const Color(0xFF4CB050),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TeacherGradesScreen())),),
-        _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
-        _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
+        // _ActionTile(title: "Attendance Report", icon: Icons.admin_panel_settings, color: const Color(0xFF607D8B),
+        //   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen())),),
+        // _ActionTile(title: "Fees Remaining", icon: Icons.money_off_csred, color: const Color(0xFF009688), onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FeesRemainingScreen())),),
         
       ],
     );
