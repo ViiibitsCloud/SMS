@@ -23,7 +23,7 @@ class TtsNativeService {
       });
 
       if (result != null && File(result).existsSync()) {
-        return result; // real path returned from native
+        return result; 
       } else {
         print('Native returned path but file not found: $result');
         return null;
