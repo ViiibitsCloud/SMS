@@ -18,7 +18,7 @@ class TeacherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Teacher App',
+      title: 'School Management System',
       
       theme: ThemeData(
         fontFamily: 'Roboto',
